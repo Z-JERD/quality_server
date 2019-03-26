@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://v3.bootcss.com/favicon.ico">
+    <title>Dashboard</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/static/dashboard.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/fontawesome/css/font-awesome.min.css">
+    <style>
+        .c1 {
+            color: red;
+             width: 50%;
+
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div >
+            <h1 class="page-header" STYLE="color: #FFAEB9">质检任务管理</h1>
+
+
+             <div class="panel panel-danger">
+                <!-- Default panel contents -->
+                <div class="panel-heading">命中{{ rule_description }}规则 <i class="fa fa-thumb-tack pull-right"></i></div>
+                <div class="panel-body">
+                    <div class="row" style="margin-bottom: 15px">
+
+                    </div><!-- /.row -->
+
+                    <table class="table table-bordered">
+                       <thead>
+
+                       </thead>
+                             <tbody>
+
+                            {% for message_data in message_obj %}
+
+                                <tr>
+                                    {% if message_data.type == 1 %}
+                                            {% if message_data.point_rule is True %}
+                                                <td><div class ='c1'>客服：{{ message_data.message }}</div></td>
+                                            {% else %}
+                                                <td><div >客服：{{ message_data.message }} </div></td>
+                                            {% endif %}
+
+
+                                    {% endif %}
+                                    {% if message_data.type == 2%}
+                                         {% if message_data.point_rule is True %}
+                                                <td><div class ='c1'>访客：{{ message_data.message }} </div></td>
+                                            {% else %}
+                                                 <td><div >访客：{{ message_data.message }} </div></td>
+                                            {% endif %}
+
+                                    {% endif %}
+
+
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="/static/jquery-3.3.1.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+
+
+</body>
+</html>
+
+
+

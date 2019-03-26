@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://v3.bootcss.com/favicon.ico">
+    <title>Dashboard</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/static/dashboard.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/fontawesome/css/font-awesome.min.css">
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://v3.bootcss.com/examples/dashboard/#">智能质检</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://v3.bootcss.com/examples/dashboard/#">Dashboard</a></li>
+                <li><a href="https://v3.bootcss.com/examples/dashboard/#">Settings</a></li>
+                <li><a href="https://v3.bootcss.com/examples/dashboard/#">Profile</a></li>
+                <li><a href="https://v3.bootcss.com/examples/dashboard/#">Help</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="Search...">
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="https://v3.bootcss.com/examples/dashboard/#"></a></li>
+                <li ><a href=" ">规则任务页</a>
+                         <li  style="margin-left: 50px"><a href="/condition_list/">质检条件页</a></li>
+                        <li  class="active" style="margin-left: 50px"><a href="/rule_list/">质检规则页</a></li>
+                  </li>
+                <li><a href="/check_list/">质检任务页</a></li>
+
+
+            </ul>
+
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header" STYLE="color: #FFAEB9">规则引擎管理</h1>
+             <div class="panel panel-danger">
+                <!-- Default panel contents -->
+                <div class="panel-heading">规则列表 <i class="fa fa-thumb-tack pull-right"></i></div>
+                <div class="panel-body">
+                    <div class="row" style="margin-bottom: 15px">
+                        <div class="col-md-4">
+
+                        </div><!-- /.col-md-4 -->
+                    </div><!-- /.row -->
+
+                    <table class="table table-bordered">
+                       <thead>
+                            <tr>
+                                <th>规则ID</th>
+                                <th>类别</th>
+                                <th>名称</th>
+                                <th>说明</th>
+                                <th>操作</th>
+                            </tr>
+                       </thead>
+                        <tbody>
+                            {% for rule in rule_list %}
+                                <tr>
+                                    <td>{{ rule.rule_id }}</td>
+                                    <td>{{ rule.rule_type  }}</td>
+                                    <td>{{ rule.name }}</td>
+                                    <td>{{ rule.rule_description }}</td>
+                                    <td>
+                                           <a class="btn btn-danger" href="/rule_del/?ruleId={{ rule.rule_id }}">删除</a>
+
+                                    </td>
+
+
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+
+
+            <div class="panel panel-danger">
+                <!-- Default panel contents -->
+                <div class="panel-heading">添加规则 <i class="fa fa-thumb-tack pull-right"></i></div>
+                <div class="panel panel-danger">
+                    <form action="http://127.0.0.1:8000/rule_add/" method="post" autocomplete="off" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+                            <p>
+                                <label >站点ID：
+                                    <input type="text" name="siteId" >
+                                </label>
+                           </p>
+
+                           <p>
+                                <label >规则ID：
+                                    <input type="text" name="ruleId">
+                                </label>
+                           </p>
+                           <p>
+                                <label >规则名称：
+                                    <input type="text" name="name">
+                                </label>
+                           </p>
+                           <p>
+                                <label >所属类别：
+                                    <input type="radio" name="ruleType" value=1 >服务规范
+                                    <input type="radio" name="ruleType" value=2>舆情监控
+                                    <input type="radio" name="ruleType" value=3>业务类
+                                    <input type="radio" name="ruleType" value=4>其他类
+                                </label>
+                           </p>
+                           <p>备注: </p>
+                                <input type="text" name="description">
+                           <p>
+                            <p>该规则的分数: </p>
+                                <input type="number" name="grade">
+                           <p>
+
+
+                            <label >条件间的逻辑关系：
+                                <input type="radio"  name="operator" value="&&">A && B
+                                <input type="radio"  name="operator" value="||">A || B
+                                <input type="radio"  name="operator" value="&&!">A &&! B
+                                <input type="radio"  name="operator" value="||!">A ||! B
+                            </label>
+                            </p>
+                             <p>
+                                <label >选择条件：
+
+                                </label>
+                                 <select name="condition" multiple>
+                                        <option value="c10006">条件A</option>
+                                        <option value="c10007">条件B</option>
+                                        <option value="c10005">条件C</option>
+                                        <option value="c10004">条件D</option>
+                                        <option value="c10008">条件E</option>
+                                        <option value="c10009">条件F</option>
+
+                                </select>
+                            </p>
+                              <input type="submit" value="提交">
+                    </form>
+
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/jquery-3.3.1.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://v3.bootcss.com/favicon.ico">
+    <title>Dashboard</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/static/dashboard.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/fontawesome/css/font-awesome.min.css">
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://v3.bootcss.com/examples/dashboard/#">智能质检</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://v3.bootcss.com/examples/dashboard/#">Dashboard</a></li>
+                <li><a href="https://v3.bootcss.com/examples/dashboard/#">Settings</a></li>
+                <li><a href="https://v3.bootcss.com/examples/dashboard/#">Profile</a></li>
+                <li><a href="https://v3.bootcss.com/examples/dashboard/#">Help</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="Search...">
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="https://v3.bootcss.com/examples/dashboard/#"></a></li>
+                <li ><a href=" ">规则任务页</a>
+                         <li class="active" style="margin-left: 50px"><a href="/condition_list/">质检条件页</a></li>
+                        <li  style="margin-left: 50px"><a href="/rule_list/">质检规则页</a></li>
+                </li>
+                <li ><a href="/check_list/">质检任务页</a></li>
+
+
+            </ul>
+
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header" STYLE="color: #FFAEB9">规则条件管理</h1>
+             <div class="panel panel-danger">
+                <!-- Default panel contents -->
+                <div class="panel-heading">条件列表 <i class="fa fa-thumb-tack pull-right"></i></div>
+                <div class="panel-body">
+                    <div class="row" style="margin-bottom: 15px">
+                        <div class="col-md-4">
+
+                        </div><!-- /.col-md-4 -->
+                    </div><!-- /.row -->
+
+                    <table class="table table-bordered">
+                       <thead>
+                            <tr>
+                                <th>条件ID</th>
+                                <th>条件算子</th>
+                                <th>文本监测范围</th>
+                                <th>角色监测范围</th>
+                                <th>参考语句</th>
+                                <th>操作</th>
+                            </tr>
+                       </thead>
+                        <tbody>
+                            {% for condition in condition_list %}
+                                <tr>
+                                    <td>{{ condition.condition_id }}</td>
+                                    <td>{{ condition.operator  }}</td>
+                                    {% if condition.text_scope  == '1|-1' %}
+                                       <td>{{ condition.text_scope }}(所有内容)</td>
+                                    {% else %}
+                                         <td>{{ condition.text_scope }}</td>
+                                    {% endif %}
+
+                                    {% if condition.role_scope == 1 %}
+                                        <td>{{ condition.role_scope }}(客服)</td>
+                                    {% endif %}
+
+                                    <td>{{ condition.reference_content }}</td>
+                                    <td>
+                                           <a class="btn btn-danger" href="/condition_del/?conditionId={{ condition.condition_id }}">删除</a>
+
+                                    </td>
+
+
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+
+
+            <div class="panel panel-danger">
+                <!-- Default panel contents -->
+                <div class="panel-heading">添加条件 <i class="fa fa-thumb-tack pull-right"></i></div>
+                <div class="panel panel-danger">
+                    <form action="http://127.0.0.1:8000/condition_add/" method="post" autocomplete="off" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+                            <p>
+                                <label >条件ID：
+                                    <input type="text" name="conditionId" >
+                                </label>
+                           </p>
+                            <div class="panel ">
+                                 <div class="panel-heading">添加算子 </div>
+                                <div class="panel panel-danger">
+                                    <p>
+                                        <input type="checkbox" name="operator" value="o10001">算子1&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span>内容类型：说话时间间隔</span>&nbsp;&nbsp;&nbsp; 相关设置：&nbsp;&nbsp;
+                                        不超过<input type="text" name="InterVal" value="60">秒
+                                    </p>
+                                    <p>
+                                         <input type="checkbox" name="operator" value="o10002">算子2&nbsp;&nbsp;&nbsp;&nbsp;
+                                         <span>内容类型：关键字</span>&nbsp;&nbsp;&nbsp; 出现类型：
+                                        <select name="is_show" >
+                                                    <option value="1">关键字全部出现</option>
+                                                    <option value="2">关键字不全部出现</option>
+                                        </select>
+                                        相关设置：&nbsp;&nbsp;
+                                          <input type="text" name="Keyword" value="你好|您好">
+
+                                    </p>
+                                    <p>
+                                        <input type="checkbox" name="operator" value="o10003">算子3&nbsp;&nbsp;&nbsp;&nbsp;
+                                         <span>内容类型：监测是否是疑问句</span>&nbsp;&nbsp;&nbsp;
+                                    </p>
+                                    <p>
+                                         <input type="checkbox" name="operator" value="o10004">算子4
+                                         <span>内容类型：监测文本相似度</span>&nbsp;&nbsp;&nbsp;相关设置：&nbsp;&nbsp;
+                                        相似度不低于<input type="text" name="Similarity" value="0.6">
+
+                                    </p>
+                                    <p>
+                                          <input type="checkbox" name="operator" value="o10005">算子5
+                                        <span>内容类型：情感分析</span>&nbsp;&nbsp;&nbsp;监测类型：
+                                        <select name="is_positive" >
+                                                    <option value="1">积极</option>
+                                                    <option value="2">消极</option>
+                                        </select>
+                                        相关设置：&nbsp;&nbsp;
+                                        值不低于<input type="text" name="Emotion" value="0.3">
+                                    </p>
+                                </div>
+                            </div>
+                            <p>
+                                <label >参考语句：
+                                    <input type="text" name="reference_content">
+                                </label>
+                           </p>
+                             <label >算子间的逻辑关系：
+                                <input type="radio"  name="Logic_operator" value="&&">1 && 2
+                                <input type="radio"  name="Logic_operator" value="||">1 || 2
+                                <input type="radio"  name="Logic_operator" value="&&!">1 &&! 2
+                                <input type="radio"  name="Logic_operator" value="||!">1 ||! 2
+                            </label>
+                           <p>
+                                <label >文本监测范围：
+                                   <select name="text_scope" >
+                                        <option value="1|-1">所有文本</option>
+                                        <option value="1|5">第一句到五句</option>
+                                        <option value="1|10">第一句到十句</option>
+                                        <option value="5|10">第五句到十句</option>
+
+                                </select>
+                                </label>
+
+                           </p>
+                         <p>
+                                <label >监测角色：
+                                    <input type="radio" name="role_scope" value=0 >所有
+                                    <input type="radio" name="role_scope" value=1>客服
+                                    <input type="radio" name="role_scope" value=2>访客
+
+                                </label>
+                           </p>
+
+
+
+                              <input type="submit" value="提交">
+                    </form>
+
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/jquery-3.3.1.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+

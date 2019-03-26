@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://v3.bootcss.com/favicon.ico">
+    <title>Dashboard</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/static/dashboard.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/fontawesome/css/font-awesome.min.css">
+</head>
+<body>
+
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div >
+            <h1 class="page-header" STYLE="color: #FFAEB9">质检任务管理</h1>
+
+
+             <div class="panel panel-danger">
+                <!-- Default panel contents -->
+                <div class="panel-heading">质检结果列表 <i class="fa fa-thumb-tack pull-right"></i></div>
+                <div class="panel-body">
+
+
+                    <table class="table table-bordered">
+                       <thead>
+                            <tr>
+                                <th>会话ID</th>
+                                <th>访客</th>
+                                <th>客服</th>
+                                <th>起始时间</th>
+                                <th>结束时间</th>
+                                <th>匹配到到规则</th>
+                                 <th>总分</th>
+                            </tr>
+                       </thead>
+                             <tbody>
+
+                            {% for result in result_obj %}
+                                <tr>
+                                    <td>{{ result.converid }}</td>
+                                    <td>{{ result.customerid }}</td>
+                                    <td>{{ result.firstsupplierid }}</td>
+                                    <td>{{ result.starttime}}</td>
+                                    <td>{{ result.endtime }}</td>
+                                    <td>
+                                        {% for rules in result.pointrules %}
+                                              <a  href="/conversation_rule/?ruleid={{ rules }}&converid={{ result.converid }}">{{ rules }}</a>
+
+                                        {% endfor %}
+
+
+                                    </td>
+                                    <td>{{ result.grade}}</td>
+
+
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="/static/jquery-3.3.1.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+
+
+</body>
+</html>
+
+
+

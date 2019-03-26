@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://v3.bootcss.com/favicon.ico">
+    <title>Dashboard</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/static/dashboard.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/fontawesome/css/font-awesome.min.css">
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://v3.bootcss.com/examples/dashboard/#">智能质检</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://v3.bootcss.com/examples/dashboard/#">Dashboard</a></li>
+                <li><a href="https://v3.bootcss.com/examples/dashboard/#">Settings</a></li>
+                <li><a href="https://v3.bootcss.com/examples/dashboard/#">Profile</a></li>
+                <li><a href="https://v3.bootcss.com/examples/dashboard/#">Help</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="Search...">
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="https://v3.bootcss.com/examples/dashboard/#"></a></li>
+                <li ><a href=" ">规则任务页</a>
+                         <li style="margin-left: 50px"><a href="/condition_list/">质检条件页</a></li>
+                        <li  style="margin-left: 50px"><a href="/rule_list/">质检规则页</a></li>
+                 </li>
+                <li class="active"><a href="/check_list/">质检任务页</a></li>
+
+
+
+            </ul>
+
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header" STYLE="color: #FFAEB9">质检任务管理</h1>
+            <div class="panel panel-danger">
+                <!-- Default panel contents -->
+                <div class="panel-heading">新增质检任务 <i class="fa fa-thumb-tack pull-right"></i></div>
+                <div class="panel-body">
+                     <form class="form-horizontal" action="/add_check/" method="post">
+                        {% csrf_token %}
+                             <div class="form-group" style="margin-top: 10px">
+                                        <p>
+                                             站点ID：<input type="text" name="siteid">
+                                             任务名称：<input type="text" name="task_name">
+                                             开始时间：<input type="date" name="start_time">
+                                             结束时间：<input type="date" name="end_time">
+                                             <div class="col-md-1 pull-right">
+                                                       <button type="submit" class="btn  btn-danger btn-block">新增</button>
+                                            </div>
+                                        </p>
+                             </div>
+                     </form>
+                </div>
+            </div>
+
+             <div class="panel panel-danger">
+                <!-- Default panel contents -->
+                <div class="panel-heading">质检任务列表 <i class="fa fa-thumb-tack pull-right"></i></div>
+                <div class="panel-body">
+
+
+                    <table class="table table-bordered">
+                       <thead>
+                            <tr>
+                                <th>任务ID</th>
+                                <th>站点ID</th>
+                                <th>任务名称</th>
+                                <th>开始时间</th>
+                                <th>结束时间</th>
+                                <th>会话操作</th>
+                                <th>质检操作</th>
+                            </tr>
+                       </thead>
+                        <tbody>
+                            {% for task in task_list %}
+                                <tr>
+                                     <td>{{ task.pk}}</td>
+                                    <td>{{ task.site_id }}</td>
+                                    <td>{{ task.name }}</td>
+                                    <td>{{ task.start_time }}</td>
+                                    <td>{{ task.end_time }}</td>
+                                    <td>
+                                           <a class="btn btn-danger" href="/delete_check/?site_id={{ task.site_id }}&name={{ task.name}}">删除</a>
+
+                                    </td>
+                                    <td>
+
+
+
+                                            <div class="btn btn-info get_data"  id="b1" converid={{ task.site_id}} name={{ task.name }} start_time={{ task.start_time }} end_time={{ task.end_time }} >提取数据</div>
+                                            <div class="btn btn-info start_check"  id="b2" converid={{ task.site_id}} start_time= {{ task.start_time }} end_time ={{  task.end_time }} >开始质检</div>
+                                           <a class="btn btn-info" href="/get_result/?site_id={{ task.site_id }}&start_time={{ task.start_time }}&end_time={{  task.end_time }}">质检结果</a>
+
+
+                                    </td>
+
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="/static/jquery-3.3.1.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/setupajax.js"></script>
+<script>
+$(".get_data").on("click", function () {
+        var  site_id =$(this).attr("converid");
+        var  name= $(this).attr("name");
+        var  start_time =$(this).attr("start_time");
+        var  end_time  =$(this).attr("end_time");
+{#        var url =  "/check/get_data/"+site_id;#}
+        $.ajax({
+            url: "/check/get_data/",
+            type: "get",
+            dataType: "json",
+            traditional: true,
+            data: {"site_id":site_id,'task_name':name, "start_time":start_time, 'end_time':end_time, "csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val(),},
+            success: function (data) {
+                // 如果后端返回来的数据经过了序列化，需要把数据反序列化成JS中的对象
+                // var data = JSON.parse(data);
+                if (data.status === 0){
+                    // 这次请求成功
+                    alert(data.data);
+                }else {
+                    // 请求出错
+                    alert(data.error);
+                }
+            }
+        })
+    });
+$(".start_check").on("click", function () {
+
+        var  site_id =$(this).attr("converid");
+
+        var  start_time =$(this).attr("start_time");
+        var  end_time  =$(this).attr("end_time");
+
+        $.ajax({
+            url: "/check/start_check/",
+            type: "get",
+            dataType: "json",
+            traditional: true,
+            data: {"site_id": site_id, "start_time":start_time, 'end_time':end_time,  "csrfmiddlewaretoken":$("[name='csrfmiddlewaretoken']").val()},
+            success: function (data) {
+                // 如果后端返回来的数据经过了序列化，需要把数据反序列化成JS中的对象
+                // var data = JSON.parse(data);
+                if (data.status === 0){
+                    // 这次请求成功
+                    alert(data.data);
+                }else {
+                    // 请求出错
+                    alert(data.error);
+                }
+            }
+        })
+    });
+
+</script>
+</body>
+</html>
+
+
+
