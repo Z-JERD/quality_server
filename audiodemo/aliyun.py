@@ -90,8 +90,8 @@ def fileTrans(akId, akSecret, appKey, fileLink) :
     else :
         print ("录音文件识别失败！")
     return
-accessKeyId = "LTAIldDpwnTsxtLc"
-accessKeySecret = "rEeWreRNqFm7qSRsPpDHs3D7OE1frJ"
+accessKeyId = ""
+accessKeySecret = ""
 appKey = "VORAlRxD5emkRm5f"
 #fileLink = "https://aliyun-nls.oss-cn-hangzhou.aliyuncs.com/asr/fileASR/examples/nls-sample-16k.wav"
 fileLink = "http://bj-v100.ntalker.com/setting/pcm/8k.wav"
