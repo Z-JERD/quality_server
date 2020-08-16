@@ -225,9 +225,9 @@ CACHES = {
 }
 
 #百度接口认证
-APP_ID = '14483119'
-API_KEY = 'pzaEkMs8UzRyvfRDZAKw5ueP'
-SECRET_KEY = 'cr9tKY013cgKt5LpjzS3gPavca4HywLI '
+APP_ID = ''
+API_KEY = ''
+SECRET_KEY = ''
 
 
 
