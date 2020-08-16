@@ -3,7 +3,7 @@ jieba==0.39
 baidu_aip==2.2.8.0
 django_redis==4.9.0
 PyMySQL==0.8.0
-Django==2.0.2
+Django==2.2.13
 aip==1.0.0.5
 cassandra_driver==3.15.1
 djangorestframework==3.9.0
